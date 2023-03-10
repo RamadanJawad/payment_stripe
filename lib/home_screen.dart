@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer sk_test_51Mk9UMCAbKRa50RL8ABlXyqWqlYxE8NFFPv8LwlmQiBgtLWqtS2GwQQjwvX19b3goCZMLahAFz0NHyjDnIeqZguv006j1NSuVK',
+              'Bearer $SCRET_KEY',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
