@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:payment/dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> makePayment() async {
     try {
       paymentIntent = await createPaymentIntent('10', 'USD');
-      //Payment Sheet
       await Stripe.instance
           .initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(
@@ -50,24 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
-        showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          ),
-                          Text("Payment Successfully"),
-                        ],
-                      ),
-                    ],
-                  ),
-                ));
+        dialog(context);
         paymentIntent = null;
       }).onError((error, stackTrace) {
         debugPrint('Error is:--->$error $stackTrace');
@@ -90,12 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
         'currency': currency,
         'payment_method_types[]': 'card'
       };
-
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer SECRETE_KEY',
+              'Bearer SECRET KEY',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
