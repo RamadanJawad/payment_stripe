@@ -38,16 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
           .initPaymentSheet(
               paymentSheetParameters: SetupPaymentSheetParameters(
                   paymentIntentClientSecret: paymentIntent!['client_secret'],
-                  // applePay: const PaymentSheetApplePay(merchantCountryCode: '+92',),
-                  // googlePay: const PaymentSheetGooglePay(testEnv: true, currencyCode: "US", merchantCountryCode: "+92"),
                   style: ThemeMode.dark,
                   merchantDisplayName: 'Ahmed'))
           .then((value) {});
-
-      ///now finally display payment sheeet
       displayPaymentSheet();
     } catch (e, s) {
-      print('exception:$e$s');
+      debugPrint('exception:$e$s');
     }
   }
 
@@ -66,31 +62,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             Icons.check_circle,
                             color: Colors.green,
                           ),
-                          Text("Payment Successfull"),
+                          Text("Payment Successfully"),
                         ],
                       ),
                     ],
                   ),
                 ));
-        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
-
         paymentIntent = null;
       }).onError((error, stackTrace) {
-        print('Error is:--->$error $stackTrace');
+        debugPrint('Error is:--->$error $stackTrace');
       });
     } on StripeException catch (e) {
-      print('Error is:---> $e');
+      debugPrint('Error is:---> $e');
       showDialog(
           context: context,
           builder: (_) => const AlertDialog(
                 content: Text("Cancelled "),
               ));
     } catch (e) {
-      print('$e');
+      debugPrint('$e');
     }
   }
-
-  //  Future<Map<String, dynamic>>
   createPaymentIntent(String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
@@ -103,22 +95,19 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
           'Authorization':
-              'Bearer $SCRET_KEY',
+              'Bearer SECRETE_KEY',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
       );
-      // ignore: avoid_print
-      print('Payment Intent Body->>> ${response.body.toString()}');
+      debugPrint('Payment Intent Body->>> ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
-      // ignore: avoid_print
-      print('err charging user: ${err.toString()}');
+      debugPrint('err charging user: ${err.toString()}');
     }
   }
-
   calculateAmount(String amount) {
-    final calculatedAmout = (int.parse(amount)) * 100;
-    return calculatedAmout.toString();
+    final calculatedAmount = (int.parse(amount)) * 100;
+    return calculatedAmount.toString();
   }
 }
